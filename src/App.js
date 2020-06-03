@@ -1,8 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
   const [todos, setTodos] = useState([]);
   const [value, setValue] = useState("");
+
+  useEffect(() => {
+    console.log(localStorage.getItem("todos"));
+    if (localStorage.todos) {
+      setTodos(JSON.parse(localStorage.getItem("todos")));
+    }
+    setIsLoading(false);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }, [todos]);
 
   const newTodo = {
     id: null,
@@ -33,33 +46,39 @@ function App() {
   };
   return (
     <div>
-      <h1>To Do App</h1>
-      <p>Total todos: {todos.length}</p>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="Add todo"
-          onChange={handleChange}
-          value={value}
-        />
-        <input type="submit" value="Add" />
-      </form>
-      <ul>
-        {todos.map((todo) => {
-          return (
-            <li key={todo.id}>
-              <button onClick={() => handleComplete(todo.id)}>
-                {todo.completed}
-              </button>
-              <button onClick={() => handleDelete(todo.id)}>Delete</button>
-              {todo.todo}
-            </li>
-          );
-        })}
-      </ul>
-      <div>
-        <pre>{JSON.stringify(todos, null, 2)}</pre>
-      </div>
+      {isLoading ? (
+        <div>Loading...</div>
+      ) : (
+        <>
+          <h1>To Do App</h1>
+          <p>Total todos: </p>
+          <form onSubmit={handleSubmit}>
+            <input
+              type="text"
+              name="Add todo"
+              onChange={handleChange}
+              value={value}
+            />
+            <input type="submit" value="Add" />
+          </form>
+          <ul>
+            {todos.map((todo) => {
+              return (
+                <li key={todo.id}>
+                  <button onClick={() => handleComplete(todo.id)}>
+                    {todo.completed}
+                  </button>
+                  <button onClick={() => handleDelete(todo.id)}>Delete</button>
+                  {todo.todo}
+                </li>
+              );
+            })}
+          </ul>
+          <div>
+            <pre>{JSON.stringify(todos, null, 2)}</pre>
+          </div>
+        </>
+      )}
     </div>
   );
 }
