@@ -28,10 +28,13 @@ function App() {
       )
     );
   };
+  const handleDelete = (id) => {
+    setTodos(todos.filter((todo) => todo.id !== id));
+  };
   return (
     <div>
       <h1>To Do App</h1>
-      <p>Total todos {value}</p>
+      <p>Total todos: {todos.length}</p>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -48,6 +51,7 @@ function App() {
               <button onClick={() => handleComplete(todo.id)}>
                 {todo.completed}
               </button>
+              <button onClick={() => handleDelete(todo.id)}>Delete</button>
               {todo.todo}
             </li>
           );
