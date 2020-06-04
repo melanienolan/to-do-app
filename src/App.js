@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Icon from "./components/Icon";
 
+const FILTERS = {
+  ALL: "all",
+  TODO: "to do",
+  DONE: "done",
+};
+
 function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [todos, setTodos] = useState([]);
@@ -9,6 +15,7 @@ function App() {
     id: 0,
     value: "",
   });
+  const [filter, setFilter] = useState(FILTERS.ALL);
 
   useEffect(() => {
     console.log(localStorage.getItem("todos"));
@@ -66,6 +73,16 @@ function App() {
     setEditInput({ id, value: todos[index].value });
   };
 
+  const handleFilterChange = (e) => {
+    setFilter(e.target.value);
+  };
+
+  const filterTodos = (todo) => {
+    if (filter === FILTERS.TODO) return !todo.completed;
+    if (filter === FILTERS.DONE) return todo.completed;
+    return todo;
+  };
+
   return (
     <div className="container">
       {isLoading ? (
@@ -74,8 +91,37 @@ function App() {
         <>
           <h1>To Do App</h1>
           <p>
-            Total todos: <pre>{JSON.stringify(editInput, null, 2)}</pre>
+            Total todos: <pre>{JSON.stringify(filter, null, 2)}</pre>
           </p>
+          <div className="filter">
+            <button
+              className={`button filter__button ${
+                filter === FILTERS.ALL ? "filter__button--selected" : ""
+              }`}
+              value={FILTERS.ALL}
+              onClick={handleFilterChange}
+            >
+              {FILTERS.ALL}
+            </button>
+            <button
+              className={`button filter__button ${
+                filter === FILTERS.TODO ? "filter__button--selected" : ""
+              }`}
+              value={FILTERS.TODO}
+              onClick={handleFilterChange}
+            >
+              {FILTERS.TODO}
+            </button>
+            <button
+              className={`button filter__button ${
+                filter === FILTERS.DONE ? "filter__button--selected" : ""
+              }`}
+              value={FILTERS.DONE}
+              onClick={handleFilterChange}
+            >
+              {FILTERS.DONE}
+            </button>
+          </div>
           <form onSubmit={handleSubmit} className="form">
             <input
               className="form__input form__input--main"
@@ -96,7 +142,7 @@ function App() {
             </button>
           </form>
           <ul className="todos-list">
-            {todos.map((todo) => {
+            {todos.filter(filterTodos).map((todo) => {
               return (
                 <li className="todos-list--item" key={todo.id}>
                   {todo.id !== editInput.id && (
@@ -162,7 +208,10 @@ function App() {
                         className="form__input form__input--edit"
                         value={editInput.value}
                         onChange={(e) => {
-                          setEditInput({ ...editInput, value: e.target.value });
+                          setEditInput({
+                            ...editInput,
+                            value: e.target.value,
+                          });
                         }}
                       />
                       <button
