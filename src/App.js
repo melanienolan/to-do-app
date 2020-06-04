@@ -8,9 +8,7 @@ function App() {
   const [editInput, setEditInput] = useState({
     id: 0,
     value: "",
-    editMode: false,
   });
-  // const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
     console.log(localStorage.getItem("todos"));
@@ -61,11 +59,11 @@ function App() {
     } else {
       handleDelete(id);
     }
-    setEditInput({ id: 0, value: "", editMode: false });
+    setEditInput({ id: 0, value: "" });
   };
   const handleOpenEditor = (id) => {
     const index = todos.findIndex((todo) => todo.id === id);
-    setEditInput({ id, value: todos[index].value, editMode: true });
+    setEditInput({ id, value: todos[index].value });
   };
 
   return (
@@ -101,46 +99,51 @@ function App() {
             {todos.map((todo) => {
               return (
                 <li className="todos-list--item" key={todo.id}>
-                  <button
-                    className={`button todos-list__button ${
-                      todo.completed ? "todos-list__button--completed" : ""
-                    }`}
-                    onClick={() => handleComplete(todo.id)}
-                  >
-                    {todo.completed && (
-                      <Icon>
-                        <path
-                          fillRule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                          clipRule="evenodd"
-                        />
-                      </Icon>
-                    )}
-                  </button>
-                  <span
-                    className={`todos-list__text ${
-                      todo.completed ? "todos-list__text--completed" : ""
-                    }`}
-                  >
-                    {todo.value}
-                  </span>
+                  {todo.id !== editInput.id && (
+                    <>
+                      <button
+                        className={`button todos-list__button ${
+                          todo.completed ? "todos-list__button--completed" : ""
+                        }`}
+                        onClick={() => handleComplete(todo.id)}
+                      >
+                        {todo.completed && (
+                          <Icon>
+                            <path
+                              fillRule="evenodd"
+                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                              clipRule="evenodd"
+                            />
+                          </Icon>
+                        )}
+                      </button>
+                      <span
+                        className={`todos-list__text ${
+                          todo.completed ? "todos-list__text--completed" : ""
+                        }`}
+                      >
+                        {todo.value}
+                      </span>
 
-                  <button onClick={() => handleOpenEditor(todo.id)}>
-                    Edit
-                  </button>
-                  <button
-                    className="button todos-list__delete"
-                    onClick={() => handleDelete(todo.id)}
-                  >
-                    <Icon>
-                      <path
-                        fillRule="evenodd"
-                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                        clipRule="evenodd"
-                      />
-                    </Icon>
-                  </button>
-                  {todo.id === editInput.id && editInput.editMode && (
+                      <button onClick={() => handleOpenEditor(todo.id)}>
+                        Edit
+                      </button>
+                      <button
+                        className="button todos-list__delete"
+                        onClick={() => handleDelete(todo.id)}
+                      >
+                        <Icon>
+                          <path
+                            fillRule="evenodd"
+                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                            clipRule="evenodd"
+                          />
+                        </Icon>
+                      </button>
+                    </>
+                  )}
+
+                  {todo.id === editInput.id && (
                     <form onSubmit={handleEditSubmit(todo.id)}>
                       <input
                         value={editInput.value}
