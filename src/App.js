@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Icon from "./components/Icon";
 import Filter from "./components/Filter";
+import InputForm from "./components/InputForm";
 import EditForm from "./components/EditForm";
 import TodoItem from "./components/TodoItem";
 import { FILTERS } from "./utils/constants";
@@ -101,39 +101,23 @@ function App() {
             selectedFilter={selectedFilter}
             handleFilterChange={handleFilterChange}
           />
-          <form onSubmit={handleSubmit} className="form">
-            <input
-              className="form__input form__input--main"
-              type="text"
-              name="Add todo"
-              onChange={handleChange}
-              value={value}
-              placeholder={"Enter todo"}
-            />
-            <button type="submit" className="button form__button">
-              <Icon>
-                <path
-                  fillRule="evenodd"
-                  d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-                  clipRule="evenodd"
-                />
-              </Icon>
-            </button>
-          </form>
+          <InputForm
+            handleSubmit={handleSubmit}
+            handleChange={handleChange}
+            value={value}
+          />
           <ul className="todos-list">
             {todos.filter(filterTodos).map((todo) => {
               return (
                 <li className="todos-list--item" key={todo.id}>
-                  {todo.id !== editInput.id && (
+                  {todo.id !== editInput.id ? (
                     <TodoItem
                       todo={todo}
                       handleComplete={handleComplete}
                       handleOpenEditor={handleOpenEditor}
                       handleDelete={handleDelete}
                     />
-                  )}
-
-                  {todo.id === editInput.id && (
+                  ) : (
                     <EditForm
                       id={todo.id}
                       value={editInput.value}
