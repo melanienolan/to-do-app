@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Icon from "./components/Icon";
-
-const FILTERS = {
-  ALL: "all",
-  TODO: "to do",
-  DONE: "done",
-};
+import Filter from "./components/Filter";
+import EditForm from "./components/EditForm";
+import { FILTERS } from "./utils/constants";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -15,7 +12,7 @@ function App() {
     id: 0,
     value: "",
   });
-  const [filter, setFilter] = useState(FILTERS.ALL);
+  const [selectedFilter, setSelectedFilter] = useState(FILTERS.ALL);
 
   useEffect(() => {
     console.log(localStorage.getItem("todos"));
@@ -72,14 +69,20 @@ function App() {
     const index = todos.findIndex((todo) => todo.id === id);
     setEditInput({ id, value: todos[index].value });
   };
+  const handleEditChange = (e) => {
+    setEditInput({
+      ...editInput,
+      value: e.target.value,
+    });
+  };
 
   const handleFilterChange = (e) => {
-    setFilter(e.target.value);
+    setSelectedFilter(e.target.value);
   };
 
   const filterTodos = (todo) => {
-    if (filter === FILTERS.TODO) return !todo.completed;
-    if (filter === FILTERS.DONE) return todo.completed;
+    if (selectedFilter === FILTERS.TODO) return !todo.completed;
+    if (selectedFilter === FILTERS.DONE) return todo.completed;
     return todo;
   };
 
@@ -91,37 +94,12 @@ function App() {
         <>
           <h1>To Do App</h1>
           <p>
-            Total todos: <pre>{JSON.stringify(filter, null, 2)}</pre>
+            Total todos: <pre>{JSON.stringify(selectedFilter, null, 2)}</pre>
           </p>
-          <div className="filter">
-            <button
-              className={`button filter__button ${
-                filter === FILTERS.ALL ? "filter__button--selected" : ""
-              }`}
-              value={FILTERS.ALL}
-              onClick={handleFilterChange}
-            >
-              {FILTERS.ALL}
-            </button>
-            <button
-              className={`button filter__button ${
-                filter === FILTERS.TODO ? "filter__button--selected" : ""
-              }`}
-              value={FILTERS.TODO}
-              onClick={handleFilterChange}
-            >
-              {FILTERS.TODO}
-            </button>
-            <button
-              className={`button filter__button ${
-                filter === FILTERS.DONE ? "filter__button--selected" : ""
-              }`}
-              value={FILTERS.DONE}
-              onClick={handleFilterChange}
-            >
-              {FILTERS.DONE}
-            </button>
-          </div>
+          <Filter
+            selectedFilter={selectedFilter}
+            handleFilterChange={handleFilterChange}
+          />
           <form onSubmit={handleSubmit} className="form">
             <input
               className="form__input form__input--main"
@@ -203,30 +181,12 @@ function App() {
                   )}
 
                   {todo.id === editInput.id && (
-                    <form className="form" onSubmit={handleEditSubmit(todo.id)}>
-                      <input
-                        className="form__input form__input--edit"
-                        value={editInput.value}
-                        onChange={(e) => {
-                          setEditInput({
-                            ...editInput,
-                            value: e.target.value,
-                          });
-                        }}
-                      />
-                      <button
-                        className="button todos-list__button todos-list__button--submit"
-                        type="submit"
-                      >
-                        <Icon>
-                          <path
-                            fillRule="evenodd"
-                            d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z"
-                            clipRule="evenodd"
-                          />
-                        </Icon>
-                      </button>
-                    </form>
+                    <EditForm
+                      id={todo.id}
+                      value={editInput.value}
+                      handleEditSubmit={handleEditSubmit}
+                      handleEditChange={handleEditChange}
+                    />
                   )}
                 </li>
               );
