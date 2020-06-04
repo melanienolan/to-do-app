@@ -16,7 +16,6 @@ function App() {
   const [selectedFilter, setSelectedFilter] = useState(FILTERS.ALL);
 
   useEffect(() => {
-    console.log(localStorage.getItem("todos"));
     if (localStorage.todos) {
       setTodos(JSON.parse(localStorage.getItem("todos")));
     }
@@ -88,15 +87,12 @@ function App() {
   };
 
   return (
-    <div className="container">
+    <div className="app">
       {isLoading ? (
         <div>Loading...</div>
       ) : (
         <>
-          <h1>To Do App</h1>
-          <p>
-            Total todos: <pre>{JSON.stringify(selectedFilter, null, 2)}</pre>
-          </p>
+          <h1 className="app__title">To Do App</h1>
           <Filter
             selectedFilter={selectedFilter}
             handleFilterChange={handleFilterChange}
@@ -129,9 +125,6 @@ function App() {
               );
             })}
           </ul>
-          <div>
-            <pre>{JSON.stringify(todos, null, 2)}</pre>
-          </div>
         </>
       )}
     </div>
