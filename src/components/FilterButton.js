@@ -1,7 +1,6 @@
 import React from "react";
 
 const FilterButton = ({ handleFilterChange, filter, selectedFilter }) => {
-  console.log("fb", filter);
   return (
     <button
       className={`button filter__button ${
