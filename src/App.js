@@ -5,6 +5,8 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [todos, setTodos] = useState([]);
   const [value, setValue] = useState("");
+  const [editValue, setEditValue] = useState({ id: 0, value: "" });
+  const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
     console.log(localStorage.getItem("todos"));
@@ -20,16 +22,16 @@ function App() {
 
   const newTodo = {
     id: null,
-    todo: "",
+    value: "",
     completed: false,
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const id = Date.now();
-    const todo = value;
+    // const value = value;
 
-    setTodos([{ ...newTodo, id, todo }, ...todos]);
+    setTodos([{ ...newTodo, id, value }, ...todos]);
     setValue("");
   };
   const handleChange = (e) => {
@@ -45,6 +47,22 @@ function App() {
   const handleDelete = (id) => {
     setTodos(todos.filter((todo) => todo.id !== id));
   };
+  const handleEdit = (id) => (e) => {
+    e.preventDefault();
+
+    setTodos(
+      todos.map((todo) =>
+        todo.id === id ? { ...todo, value: editValue.value } : todo
+      )
+    );
+    setEditMode(false);
+  };
+  const handleOpenEditor = (id) => {
+    const index = todos.findIndex((todo) => todo.id === id);
+    setEditValue({ id, value: todos[index].value });
+    setEditMode(!editMode);
+  };
+
   return (
     <div className="container">
       {isLoading ? (
@@ -52,7 +70,7 @@ function App() {
       ) : (
         <>
           <h1>To Do App</h1>
-          <p>Total todos: </p>
+          <p>Total todos: {editMode ? "edit" : "no"}</p>
           <form onSubmit={handleSubmit} className="form">
             <input
               className="form__input"
@@ -97,8 +115,12 @@ function App() {
                       todo.completed ? "todos-list__text--completed" : ""
                     }`}
                   >
-                    {todo.todo}
+                    {todo.value}
                   </span>
+
+                  <button onClick={() => handleOpenEditor(todo.id)}>
+                    Edit
+                  </button>
                   <button
                     className="button todos-list__delete"
                     onClick={() => handleDelete(todo.id)}
@@ -111,6 +133,17 @@ function App() {
                       />
                     </Icon>
                   </button>
+                  {todo.id === editValue.id && editMode && (
+                    <form onSubmit={handleEdit(todo.id)}>
+                      <input
+                        value={editValue.value}
+                        onChange={(e) => {
+                          setEditValue({ ...editValue, value: e.target.value });
+                        }}
+                      />
+                      <button type="submit">Submit</button>
+                    </form>
+                  )}
                 </li>
               );
             })}
