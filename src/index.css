@@ -8,9 +8,83 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #dedeee;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+.container {
+  width: 90vw;
+  max-width: 500px;
+  min-height: 100vh;
+  margin: 0 auto;
+  border: 1px solid pink;
+  padding: 5px;
+}
+.button {
+  border: none;
+  background-color: transparent;
+  font-family: inherit;
+  padding: 0;
+  cursor: pointer;
+}
+.button:focus {
+  outline: none;
+  border: 2px solid #6930c3;
+}
+.form {
+  display: flex;
+}
+.form__input {
+  border: 1px solid #6930c3;
+  border-radius: 2px;
+  height: 3rem;
+  padding: 20px;
+  width: 100%;
+}
+.form__button {
+  background-color: #6930c3;
+  color: #ffffff;
+  border-radius: 2px;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.18);
+  height: 3rem;
+  width: 3rem;
+}
+.todos-list {
+  padding: 0;
+}
+.todos-list--item {
+  background-color: #ffffff;
+  list-style-type: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 3rem;
+  margin: 5px 0;
+  padding: 5px;
+}
+.todos-list__button {
+  border-radius: 50%;
+  border: 2px solid #6930c3;
+  width: 1.8rem;
+  height: 1.8rem;
+}
+.todos-list__button--completed {
+  color: white;
+  background-color: #6930c3;
+}
+.todos-list__text {
+  max-width: 80%;
+  white-space: wrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.todos-list__text--completed {
+  text-decoration: line-through;
+  color: grey;
+}
+.todos-list__delete {
+  color: #6930c3;
 }

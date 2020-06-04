@@ -46,21 +46,23 @@ function App() {
     setTodos(todos.filter((todo) => todo.id !== id));
   };
   return (
-    <div>
+    <div className="container">
       {isLoading ? (
         <div>Loading...</div>
       ) : (
         <>
           <h1>To Do App</h1>
           <p>Total todos: </p>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="form">
             <input
+              className="form__input"
               type="text"
               name="Add todo"
               onChange={handleChange}
               value={value}
+              placeholder={"Enter todo"}
             />
-            <button type="submit">
+            <button type="submit" className="button form__button">
               <Icon>
                 <path
                   fillRule="evenodd"
@@ -70,21 +72,37 @@ function App() {
               </Icon>
             </button>
           </form>
-          <ul>
+          <ul className="todos-list">
             {todos.map((todo) => {
               return (
-                <li key={todo.id}>
-                  <button onClick={() => handleComplete(todo.id)}>
-                    <Icon>
-                      <path
-                        fillRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      />
-                    </Icon>
+                <li className="todos-list--item" key={todo.id}>
+                  <button
+                    className={`button todos-list__button ${
+                      todo.completed ? "todos-list__button--completed" : ""
+                    }`}
+                    onClick={() => handleComplete(todo.id)}
+                  >
+                    {todo.completed && (
+                      <Icon>
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </Icon>
+                    )}
                   </button>
-                  {todo.todo}
-                  <button onClick={() => handleDelete(todo.id)}>
+                  <span
+                    className={`todos-list__text ${
+                      todo.completed ? "todos-list__text--completed" : ""
+                    }`}
+                  >
+                    {todo.todo}
+                  </span>
+                  <button
+                    className="button todos-list__delete"
+                    onClick={() => handleDelete(todo.id)}
+                  >
                     <Icon>
                       <path
                         fillRule="evenodd"
