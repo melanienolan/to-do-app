@@ -5,8 +5,12 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [todos, setTodos] = useState([]);
   const [value, setValue] = useState("");
-  const [editValue, setEditValue] = useState({ id: 0, value: "" });
-  const [editMode, setEditMode] = useState(false);
+  const [editInput, setEditInput] = useState({
+    id: 0,
+    value: "",
+    editMode: false,
+  });
+  // const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
     console.log(localStorage.getItem("todos"));
@@ -29,7 +33,6 @@ function App() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const id = Date.now();
-    // const value = value;
 
     setTodos([{ ...newTodo, id, value }, ...todos]);
     setValue("");
@@ -47,20 +50,22 @@ function App() {
   const handleDelete = (id) => {
     setTodos(todos.filter((todo) => todo.id !== id));
   };
-  const handleEdit = (id) => (e) => {
+  const handleEditSubmit = (id) => (e) => {
     e.preventDefault();
-
-    setTodos(
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, value: editValue.value } : todo
-      )
-    );
-    setEditMode(false);
+    if (editInput.value) {
+      setTodos(
+        todos.map((todo) =>
+          todo.id === id ? { ...todo, value: editInput.value } : todo
+        )
+      );
+    } else {
+      handleDelete(id);
+    }
+    setEditInput({ id: 0, value: "", editMode: false });
   };
   const handleOpenEditor = (id) => {
     const index = todos.findIndex((todo) => todo.id === id);
-    setEditValue({ id, value: todos[index].value });
-    setEditMode(!editMode);
+    setEditInput({ id, value: todos[index].value, editMode: true });
   };
 
   return (
@@ -70,7 +75,9 @@ function App() {
       ) : (
         <>
           <h1>To Do App</h1>
-          <p>Total todos: {editMode ? "edit" : "no"}</p>
+          <p>
+            Total todos: <pre>{JSON.stringify(editInput, null, 2)}</pre>
+          </p>
           <form onSubmit={handleSubmit} className="form">
             <input
               className="form__input"
@@ -133,12 +140,12 @@ function App() {
                       />
                     </Icon>
                   </button>
-                  {todo.id === editValue.id && editMode && (
-                    <form onSubmit={handleEdit(todo.id)}>
+                  {todo.id === editInput.id && editInput.editMode && (
+                    <form onSubmit={handleEditSubmit(todo.id)}>
                       <input
-                        value={editValue.value}
+                        value={editInput.value}
                         onChange={(e) => {
-                          setEditValue({ ...editValue, value: e.target.value });
+                          setEditInput({ ...editInput, value: e.target.value });
                         }}
                       />
                       <button type="submit">Submit</button>
