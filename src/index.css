@@ -42,6 +42,8 @@ code {
   border-radius: 2px;
   height: 3rem;
   padding: 20px;
+}
+.form__input--main {
   width: 100%;
 }
 .form__button {
@@ -66,14 +68,21 @@ code {
   padding: 5px;
 }
 .todos-list__button {
-  border-radius: 50%;
-  border: 2px solid #6930c3;
+  color: #6930c3;
   width: 1.8rem;
   height: 1.8rem;
+  border-radius: 2px;
 }
-.todos-list__button--completed {
+.todos-list__button--incomplete {
+  border: 2px solid #6930c3;
+}
+.todos-list__button--complete {
   color: white;
   background-color: #6930c3;
+}
+.todos-list__button--delete {
+}
+.todos-list__button--edit {
 }
 .todos-list__text {
   max-width: 80%;
@@ -87,4 +96,6 @@ code {
 }
 .todos-list__delete {
   color: #6930c3;
+}
+.form__input--edit {
 }
