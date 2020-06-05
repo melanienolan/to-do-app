@@ -5,7 +5,7 @@ const InputForm = ({ handleSubmit, handleChange, value }) => {
   return (
     <form onSubmit={handleSubmit} className="form">
       <input
-        className="form__input form__input--main"
+        className="form__input"
         type="text"
         name="Add todo"
         onChange={handleChange}

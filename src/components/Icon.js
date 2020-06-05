@@ -1,8 +1,8 @@
 import React from "react";
 
 const Icon = ({
-  width = "20",
-  height = "20",
+  width = "1.3rem",
+  height = "1.3rem",
   fill = "currentColor",
   children,
 }) => {

@@ -5,14 +5,11 @@ const EditForm = ({ id, value, handleEditSubmit, handleEditChange }) => {
   return (
     <form className="form" onSubmit={handleEditSubmit(id)}>
       <input
-        className="form__input form__input--edit"
+        className="form__input"
         value={value}
         onChange={handleEditChange}
       />
-      <button
-        className="button todos-list__button todos-list__button--submit"
-        type="submit"
-      >
+      <button className="button form__button" type="submit">
         <Icon>
           <path
             fillRule="evenodd"

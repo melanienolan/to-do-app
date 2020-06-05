@@ -29,9 +29,9 @@ const TodoItem = ({ todo, handleComplete, handleOpenEditor, handleDelete }) => {
       >
         {todo.value}
       </span>
-      <div>
+      <div className="todos-list__container">
         <button
-          className="button todos-list__button todos-list__button--edit"
+          className="button todos-list__button"
           onClick={() => handleOpenEditor(todo.id)}
         >
           <Icon>
@@ -44,7 +44,7 @@ const TodoItem = ({ todo, handleComplete, handleOpenEditor, handleDelete }) => {
           </Icon>
         </button>
         <button
-          className="button todos-list__button todos-list__button--delete"
+          className="button todos-list__button"
           onClick={() => handleDelete(todo.id)}
         >
           <Icon>
