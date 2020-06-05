@@ -12,7 +12,7 @@ const InputForm = ({ handleSubmit, handleChange, value }) => {
         value={value}
         placeholder={"Enter todo"}
       />
-      <button type="submit" className="button form__button">
+      <button type="submit" className="button form__button" disabled={!value}>
         <Icon>
           <path
             fillRule="evenodd"
