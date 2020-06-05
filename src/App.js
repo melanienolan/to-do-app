@@ -4,15 +4,13 @@ import InputForm from "./components/InputForm";
 import EditForm from "./components/EditForm";
 import TodoItem from "./components/TodoItem";
 import { FILTERS } from "./utils/constants";
+import { todoTemplate, editTemplate } from "./utils/templates";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [todos, setTodos] = useState([]);
   const [value, setValue] = useState("");
-  const [editInput, setEditInput] = useState({
-    id: 0,
-    value: "",
-  });
+  const [editInput, setEditInput] = useState(editTemplate);
   const [selectedFilter, setSelectedFilter] = useState(FILTERS.ALL);
 
   useEffect(() => {
@@ -26,17 +24,11 @@ function App() {
     localStorage.setItem("todos", JSON.stringify(todos));
   }, [todos]);
 
-  const newTodo = {
-    id: null,
-    value: "",
-    completed: false,
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     const id = Date.now();
 
-    setTodos([{ ...newTodo, id, value }, ...todos]);
+    setTodos([{ ...todoTemplate, id, value }, ...todos]);
     setValue("");
   };
   const handleChange = (e) => {
@@ -63,7 +55,7 @@ function App() {
     } else {
       handleDelete(id);
     }
-    setEditInput({ id: 0, value: "" });
+    setEditInput(editTemplate);
   };
   const handleOpenEditor = (id) => {
     const index = todos.findIndex((todo) => todo.id === id);
