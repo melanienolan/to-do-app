@@ -7,18 +7,12 @@ import { FILTERS } from "./utils/constants";
 import { todoTemplate, editTemplate } from "./utils/templates";
 
 function App() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState(
+    JSON.parse(localStorage.getItem("todos")) || []
+  );
   const [value, setValue] = useState("");
   const [editInput, setEditInput] = useState(editTemplate);
   const [selectedFilter, setSelectedFilter] = useState(FILTERS.ALL);
-
-  useEffect(() => {
-    if (localStorage.todos) {
-      setTodos(JSON.parse(localStorage.getItem("todos")));
-    }
-    setIsLoading(false);
-  }, []);
 
   useEffect(() => {
     localStorage.setItem("todos", JSON.stringify(todos));
@@ -80,45 +74,39 @@ function App() {
 
   return (
     <div className="app">
-      {isLoading ? (
-        <div>Loading...</div>
-      ) : (
-        <>
-          <h1 className="app__title">To Do App</h1>
-          <Filter
-            selectedFilter={selectedFilter}
-            handleFilterChange={handleFilterChange}
-          />
-          <InputForm
-            handleSubmit={handleSubmit}
-            handleChange={handleChange}
-            value={value}
-          />
-          <ul className="todos-list">
-            {todos.filter(filterTodos).map((todo) => {
-              return (
-                <li className="todos-list--item" key={todo.id}>
-                  {todo.id !== editInput.id ? (
-                    <TodoItem
-                      todo={todo}
-                      handleComplete={handleComplete}
-                      handleOpenEditor={handleOpenEditor}
-                      handleDelete={handleDelete}
-                    />
-                  ) : (
-                    <EditForm
-                      id={todo.id}
-                      value={editInput.value}
-                      handleEditSubmit={handleEditSubmit}
-                      handleEditChange={handleEditChange}
-                    />
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-        </>
-      )}
+      <h1 className="app__title">To Do App</h1>
+      <Filter
+        selectedFilter={selectedFilter}
+        handleFilterChange={handleFilterChange}
+      />
+      <InputForm
+        handleSubmit={handleSubmit}
+        handleChange={handleChange}
+        value={value}
+      />
+      <ul className="todos-list">
+        {todos.filter(filterTodos).map((todo) => {
+          return (
+            <li className="todos-list--item" key={todo.id}>
+              {todo.id !== editInput.id ? (
+                <TodoItem
+                  todo={todo}
+                  handleComplete={handleComplete}
+                  handleOpenEditor={handleOpenEditor}
+                  handleDelete={handleDelete}
+                />
+              ) : (
+                <EditForm
+                  id={todo.id}
+                  value={editInput.value}
+                  handleEditSubmit={handleEditSubmit}
+                  handleEditChange={handleEditChange}
+                />
+              )}
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }
